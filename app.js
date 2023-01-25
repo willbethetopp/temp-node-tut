@@ -1,8 +1,17 @@
-const _ = require("lodash");
+const fs = require("fs");
 
-const items = [1, [2, [3, [4, [5, [6]]]]]];
+const getText = (path) => {
+	return new Promise((resolve, reject) => {
+		fs.readFile(path, "utf-8", (err, data) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(data);
+			}
+		});
+	});
+};
 
-const newItems = _.flattenDeep(items);
-
-console.log(newItems);
-console.log('nothing');
+getText("./content/first.txt")
+	.then((result) => console.log(result))
+	.catch((error) => console.log(error));
