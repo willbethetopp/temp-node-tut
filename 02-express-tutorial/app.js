@@ -1,49 +1,15 @@
 const express = require("express");
-const { products } = require("./data");
+let { people } = require("./data");
+// const morgan = require("morgan");
 
 const app = express();
 
-app.get("/", (req, res) =>
-	res.send('<h1>Home Page</h1><a href="/api/products">Products</a>')
-);
+// app.use(morgan("tiny"));
+app.use(express.static(__dirname + "/02-express-tutorial/methods-public"));
+app.use(express.urlencoded({ extended: false }));
 
-app.get("/api/products", (req, res) => {
-	const newProduct = products.map((product) => {
-		const { id, name, image } = product;
-		return { id, name, image };
-	});
-
-	return res.json(newProduct);
+app.get("/api/peoples", (req, res) => {
+	res.status(200).json({ success: true, data: people });
 });
 
-app.get("/api/products/:productId", (req, res) => {
-	// request params
-	const { productId } = req.params;
-	const singleProduct = products.find(
-		(product) => product.id === Number(productId)
-	);
-
-	if (!singleProduct)
-		return res.status(404).send("<h1>Product doens't exist</h1>");
-
-	return res.json(singleProduct);
-});
-
-app.get("/api/products/:productId/reviews/:reviewId", (req, res) => {
-	console.log(req.params);
-	return res.send("Hello World");
-});
-
-app.get("/api/v1/query", (req, res) => {
-	// request query
-	const { search, limit } = req.query;
-
-	if (search) {
-	}
-
-	return res.send("Hello world");
-});
-
-app.listen(5000, () => {
-	console.log("Server is listening on port 5000...");
-});
+app.listen(5000, () => console.log("Server is listening on port 5000"));
