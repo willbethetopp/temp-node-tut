@@ -9,6 +9,7 @@ app.use(express.static(__dirname + "/02-express-tutorial/methods-public"));
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/api/peoples", (req, res) => {
+	console.log("Test");
 	res.status(200).json({ success: true, data: people });
 });
 
