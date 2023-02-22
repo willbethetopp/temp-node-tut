@@ -1,28 +1,35 @@
-// const express = require("express");
+const express = require("express");
 const connectDB = require("./db/connect");
-// const tasksRoutes = require("./routes/tasks-route");
-// const morgan = require("morgan");
+const tasksRoutes = require("./routes/tasks-route");
+const notFound = require("./middleware/not-found");
+const errorHandler = require("./middleware/error-handler");
+const morgan = require("morgan");
+const path = require("path");
 require("dotenv").config();
-// // const path = require("path");
 
-// const app = express();
+// app
+const app = express();
 
-// // app.use(express.static(path.join(__dirname, "./public")));
-// app.use(morgan("tiny"));
-// app.use(express.json());
-// app.use("/api/v1/tasks", tasksRoutes);
+// middleware
+app.use(express.static(path.join(__dirname, "./public")));
+app.use(morgan("tiny"));
+app.use(express.json());
 
-// const PORT = 3000;
+// routes
+app.use("/api/v1/tasks", tasksRoutes);
+app.use(notFound);
+app.use(errorHandler);
 
-// const connectToDB = async () => {
-// 	try {
-// 		await connectDB(process.env.MONGO_URI);
-// 	} catch (error) {
-// 		console.log(error);
-// 	}
-// };
+// port
+const PORT = process.env.PORT;
 
-connectDB(process.env.MONGO_URI);
-// app.listen(PORT, () => {
-// 	console.log(`Server is listening on port ${PORT}`);
-// });
+const start = async () => {
+	try {
+		await connectDB(process.env.MONGO_URI);
+		app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+start();
