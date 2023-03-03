@@ -1,3 +1,6 @@
+require("dotenv").config();
+require("express-async-errors");
+
 const express = require("express");
 const connectDB = require("./db/connect");
 const productsRoute = require("./routes/productsRoute");
@@ -5,8 +8,6 @@ const morgan = require("morgan");
 
 const errorHandler = require("./middleware/error-handler");
 const notFound = require("./middleware/not-found");
-
-require("dotenv").config();
 
 const app = express();
 
