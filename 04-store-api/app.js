@@ -1,27 +1,23 @@
 const express = require("express");
 const connectDB = require("./db/connect");
-const tasksRoutes = require("./routes/tasks-route");
-const notFound = require("./middleware/not-found");
-const errorHandler = require("./middleware/error-handler");
+const productsRoute = require("./routes/productsRoute");
 const morgan = require("morgan");
-const path = require("path");
+
+const errorHandler = require("./middleware/error-handler");
+const notFound = require("./middleware/not-found");
+
 require("dotenv").config();
 
-// app
 const app = express();
 
-// middleware
-app.use(express.static(path.join(__dirname, "./public")));
 app.use(morgan("tiny"));
 app.use(express.json());
+app.use("/api/v1/products", productsRoute);
 
-// routes
-app.use("/api/v1/tasks", tasksRoutes);
-app.use(notFound);
 app.use(errorHandler);
+app.use(notFound);
 
-// port
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 const start = async () => {
 	try {
